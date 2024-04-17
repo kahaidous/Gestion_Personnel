@@ -1,13 +1,15 @@
 package ma.emsi.gestion_personnel.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
-@Entity
-@AllArgsConstructor @NoArgsConstructor
+
 //@Data = @Getter + @Setter +@ToString ...
-@Data
+@Entity @Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
 @Table(name = "Personnel")
 public class Employee {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,11 +19,12 @@ public class Employee {
     @Column(name = "date_naissance")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
-
-    @Column(unique = true,nullable = false,length = 8)
+    @Column(unique = false,nullable = false,length = 8)
+    @JsonIgnore //Eliminer l'affichage du CIN
     private String cin;
-    @Transient
     private String phone;
-    @Temporal(TemporalType.TIME)
-    private Date h;
+    @OneToOne
+    private Salary salary;
+    @ManyToOne
+    private Departement departement;
 }
